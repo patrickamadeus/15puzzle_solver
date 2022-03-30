@@ -1,1 +1,1 @@
-# 15x15puzzle_solver
+# 15puzzle_solver
