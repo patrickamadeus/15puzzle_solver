@@ -21,37 +21,32 @@ start = dt.now()
 
 pq = PriorityQueue()
 
-
-if isValidProblem(m):
+root_cost = getCost(m)
+if isSolvable(m):
     i = 1
     while not isSolution(m):
         print("TURN %d" % i)
-        time.sleep(1)
+        # time.sleep(1)
         while_counter += 1
 
-        min_matrix = None
-        min_cost = 16
-
         x,y = koordinat(m,0)
-        chosen_dir = ""
         for dirs in moveType(x,y):
             nm = dc(m)
             nm = move(nm, x, y, dirs)
 
-            if isValidProblem(nm):
-                cost = getCost(nm)
-                if cost < min_cost:
-                    min_matrix = nm
-                    min_cost = cost
-                    chosen_dir = dirs
+            # -- enqueue valid problem for every direction, with its root cost -- #
+            if isSolvable(nm):
+                pq.enqueue(nm, getCost(nm) + root_cost)
+                # print(getCost(nm) , root_cost)
 
-        m = min_matrix
-        print("MOVING %s" % chosen_dir)
+        # -- dequeue the least cost matrix -- #
+        # print(pq)
+        root_cost,m = pq.dequeue()
         printMatrix(m)
         i+=1
 
     end = dt.now()
     print("Total Turn Needed to Solve : %d" % while_counter)
-    print("RUNTIME: %.5f" % (float((end-start).total_seconds()) - while_counter) )
+    print("RUNTIME: %.5f" % (float((end-start).total_seconds()) - 0) )
 else:
     print("THIS PROBLEM IS NOT SOLVABLE")
