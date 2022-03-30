@@ -113,6 +113,13 @@ def getCost(m):
             correct_num += 1
     return count 
 
+def getCostBetween(m1,m2):
+    count = 0
+    for i in range(len(m1)):
+        for j in range(len(m2)):
+            if m1[i][j] != m2[i][j] and m1[i][j] != 0:
+                count += 1
+    return count
 def isSolution(m):
     num = 1
     for i in m:

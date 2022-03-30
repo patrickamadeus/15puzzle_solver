@@ -37,10 +37,8 @@ if isSolvable(m):
             # -- enqueue valid problem for every direction, with its root cost -- #
             if isSolvable(nm):
                 pq.enqueue(nm, getCost(nm) + root_cost)
-                # print(getCost(nm) , root_cost)
 
         # -- dequeue the least cost matrix -- #
-        # print(pq)
         root_cost,m = pq.dequeue()
         printMatrix(m)
         i+=1
