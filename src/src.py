@@ -60,14 +60,6 @@ def moveType(x,y):
         else:
             return "url"
 
-def getX(m) -> int:
-# I.S. m terdefinisi, selalu mengandung 0
-# F.S. mengembalikan 1 apabila posisi 0 di matrix m (i,j) memenuhi (i+j) mod 2 != 0
-    for i in range(len(m)):
-        for j in range(len(m)):
-            if m[i][j] == 0:
-                return int((i+j) % 2 != 0)
-
 def posisi(num,m) -> int:
     pos = 0
     for i in m:
@@ -82,25 +74,34 @@ def koordinat(m, num) -> (int,int):
             if m[i][j] == num:
                 return i,j
 
-def kurang(num,m) -> int:
+def getX(m) -> int:
+# I.S. m terdefinisi, selalu mengandung 0
+# F.S. mengembalikan 1 apabila posisi 0 di matrix m (i,j) memenuhi (i+j) mod 2 != 0
+    for i in range(len(m)):
+        for j in range(len(m)):
+            if m[i][j] == 0:
+                return int((i+j) % 2 != 0)
+
+def getKurang(arr):
+    arr1=[]
+    for y in arr:
+        for x in y:
+            arr1.append(x)
+    arr = arr1
     count = 0
-    for i in m:
-        for j in i:
-            if num == 0:
-                count += int(j < 16 and posisi(j,m) > posisi(num, m))
-            else:
-                count += int(j < num and posisi(j,m) > posisi(num, m) and j != 0)
+    for i in range(15):
+        for j in range(i + 1,16):
+            if (arr[j] and arr[i] and arr[i] > arr[j]):
+                count+=1
     return count
 
-def totalKurang(m) -> int:
-    total = 0
-    for i in m:
-        for j in i:
-            total += kurang(j,m)
-    return total
-
-def isValidProblem(m):
-    return (totalKurang(m) + getX(m)) % 2 == 0
+def isSolvable(m):
+    pos = getX(m)
+    invCount = getKurang(m)
+    if (pos & 1):
+        return ~(invCount & 1)
+    else:
+        return invCount & 1
 
 
 def getCost(m):
@@ -149,50 +150,3 @@ class PriorityQueue:
 
     def size(self):
         return len(self.queue)
-
-
-N=4
-def getInvCount(arr):
-    arr1=[]
-    for y in arr:
-        for x in y:
-            arr1.append(x)
-    arr=arr1
-    inv_count = 0
-    for i in range(N * N - 1):
-        for j in range(i + 1,N * N):
-            # count pairs(arr[i], arr[j]) such that
-            # i < j and arr[i] > arr[j]
-            if (arr[j] and arr[i] and arr[i] > arr[j]):
-                inv_count+=1
-         
-     
-    return inv_count
- 
- 
-# find Position of blank from bottom
-def findXPosition(puzzle):
-    # start from bottom-right corner of matrix
-    for i in range(N - 1,-1,-1):
-        for j in range(N - 1,-1,-1):
-            if (puzzle[i][j] == 0):
-                return N - i
- 
- 
-# This function returns true if given
-# instance of N*N - 1 puzzle is solvable
-def isSolvable(puzzle):
-    # Count inversions in given puzzle
-    invCount = getInvCount(puzzle)
- 
-    # If grid is odd, return true if inversion
-    # count is even.
-    if (N & 1):
-        return ~(invCount & 1)
- 
-    else:    # grid is even
-        pos = findXPosition(puzzle)
-        if (pos & 1):
-            return ~(invCount & 1)
-        else:
-            return invCount & 1
