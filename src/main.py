@@ -1,7 +1,6 @@
 from src import *
 
-### ========= MAIN PROGRAM ========= ###
-
+# ========= FILENAME VALIDATION SECTION ========= #
 filename = input("Enter your filename (with extension): ")
 
 path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'test'))
@@ -12,39 +11,51 @@ while filename not in os.listdir(path):
 
 
 m = readFile(path+'\\'+filename)
-printMatrix(m)
-
-while_counter = 0
 
 
-start = dt.now()
 
-pq = PriorityQueue()
+# ========== MAIN PROGRAM SECTION ========== #
 
-root_cost = getCost(m)
-if isSolvable(m):
-    i = 1
+
+if isSolvable2(m):
+    nodes = 0
+    routes = {str(m) : ('root',None)}
+    root_cost = getCost(m)
+
+    # Init heap
+    l = [(root_cost,m)]
+    hq.heapify(l)
+
+
+    # ============= SOLUTION FINDING SECTION ============= #
+    # begin timer
+    start = dt.now()
     while not isSolution(m):
-        print("TURN %d" % i)
-        # time.sleep(1)
-        while_counter += 1
-
         x,y = koordinat(m,0)
         for dirs in moveType(x,y):
             nm = dc(m)
             nm = move(nm, x, y, dirs)
 
-            # -- enqueue valid problem for every direction, with its root cost -- #
-            if isSolvable(nm):
-                pq.enqueue(nm, getCost(nm) + root_cost)
+            # enqueue new problem for direction dirs, with its cost consist of sum of current cost and root
+            if str(nm) not in routes:
+                hq.heappush(l, (getCost(nm) + root_cost, nm))
+                nodes += 1
+                routes[str(nm)] = (m,dirs)
 
-        # -- dequeue the least cost matrix -- #
-        root_cost,m = pq.dequeue()
-        printMatrix(m)
-        i+=1
-
+        # get the least cost puzzle 
+        root_cost,m = hq.heappop(l)
+    
     end = dt.now()
-    print("Total Turn Needed to Solve : %d" % while_counter)
-    print("RUNTIME: %.5f" % (float((end-start).total_seconds()) - 0) )
+    # end timer
+
+
+    # Gather and print the solved path
+    result = gatherSolvedPath(m,routes)
+    printSolvedPath(result)
+
+
+    # Information about the solution
+    print("Total Node(s) Needed to Solve : %d" % nodes)
+    print("ALGORITHM RUNTIME: %.5f s" % (float((end-start).total_seconds())) )
 else:
     print("THIS PROBLEM IS NOT SOLVABLE")
