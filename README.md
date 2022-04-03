@@ -23,8 +23,9 @@ Program dapat dijalankan dengan cara :
 2. Masukkan file berekstensi `.txt` pada folder test
 3. Jalankan `main.py`
 4. Masukkan nama file yang telah dibuat berikut dengan ekstensi `.txt`
-5. Pilih (y/n) untuk visualisasi
-6. Visualisasi akan ditampilkan via window GUI (y) atau luaran terminal (n), beserta dengan informasi keberjalanan algoritma pada terminal
+5. Apabila puzzle solvable, lanjut ke tahap 6. Sebaliknya akan dikeluarkan luaran `NOT SOLVABLE`
+6. Pilih `(y/n)` untuk visualisasi
+7. Visualisasi akan ditampilkan via window GUI (y) atau luaran terminal (n), beserta dengan informasi keberjalanan algoritma pada terminal
 
 ## Author
 Patrick Amadeus Irawan (13520109)
