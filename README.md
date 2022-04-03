@@ -21,7 +21,7 @@ Untuk dapat menjalankan permainan ini, maka pastikan perangkat sudah dilengkapi 
 Program dapat dijalankan dengan cara :
 1. Buat testcase **15 Puzzle** yang hendak dicari solusinya (pastikan format benar)
 2. Masukkan file berekstensi `.txt` pada folder test
-3. Jalankan `main.py`
+3. Masuk ke folder `/src` dan jalankan `main.py`
 4. Masukkan nama file yang telah dibuat berikut dengan ekstensi `.txt`
 5. Apabila puzzle solvable, lanjut ke tahap 6. Sebaliknya akan dikeluarkan luaran `NOT SOLVABLE`
 6. Pilih `(y/n)` untuk visualisasi
