@@ -117,20 +117,30 @@ def isSolution(m):
             num += 1
     return True
 
-def getKurang(m):
-# I.S. arr merupakan matrix puzzle terdefinisi
-# F.S. mengembalikan nilai sum of KURANG(i) dengan i merupakan setiap elemen dari arr (1,2,3,...,15)
-    m1=[]
-    for y in m:
-        for x in y:
-            m1.append(x)
-    m = m1
+def Kurang(m,i):
+# I.S. m dan i terdefinisi
+# F.S. mengembalikan nilai KURANG(i), banyaknya ubin bernomor j
+#      sedemikian sehingga j < i dan POSISI(j) > POSISI(i).
     count = 0
-    for i in range(15):
-        for j in range(i + 1,16):
-            if (m[j] and m[i] and m[i] > m[j]):
-                count+=1
+    for arr in m:
+        for j in arr:
+            if j == 0:
+                j = 16
+            if i == 0:
+                if j != i and j < 16 and posisi(j,m) > posisi(i,m):
+                    count += 1
+            else:
+                if j!=i and j < i and posisi(j,m) > posisi(i,m):
+                    count += 1
     return count
+
+def sigmaKurang(m):
+# I.S. m terdefinisi
+# F.S. mengembalikan nilai total KURANG(i) untuk i pada range [0..15]
+    sigma = 0
+    for i in range(16):
+        sigma += Kurang(m,i)
+    return sigma
  
  
 def getX(m):
@@ -145,7 +155,18 @@ def getX(m):
 def isSolvable(m):
 # I.S. m terdefinisi
 # F.S. mengembalikan True apabila puzzle terdefinisi memiliki solusi, False apabila tidak
-    return (getKurang(m) + getX(m)) % 2 == 0
+    return (sigmaKurang(m) + getX(m)) % 2 == 0
+
+def printInitInfo(m):
+# I.S. m terdefinisi
+# F.S. menampilkan informasi awal, mengenai solvable / tidak
+    print("0 refers to block 16")
+    for i in range(16):
+        print(i,":",Kurang(m, i))
+    print("X :",getX(m))
+    print("---------------")
+    print("SIGMA KURANG + X = ", sigmaKurang(m) + getX(m))
+    print()
 
 
 def gatherSolvedPath(m,routes):
@@ -177,50 +198,3 @@ def printSolvedPath(result):
             else:
                 move = 'RIGHT'
             print("STEP {}: MOVE {}".format(len(result)- idx , move))
-
-
-N=4
-def getInvCount(arr):
-    arr1=[]
-    for y in arr:
-        for x in y:
-            arr1.append(x)
-    arr=arr1
-    inv_count = 0
-    for i in range(N * N - 1):
-        for j in range(i + 1,N * N):
-            # count pairs(arr[i], arr[j]) such that
-            # i < j and arr[i] > arr[j]
-            if (arr[j] and arr[i] and arr[i] > arr[j]):
-                inv_count+=1
-         
-     
-    return inv_count
- 
- 
-# find Position of blank from bottom
-def findXPosition(puzzle):
-    # start from bottom-right corner of matrix
-    for i in range(N - 1,-1,-1):
-        for j in range(N - 1,-1,-1):
-            if (puzzle[i][j] == 0):
-                return N - i
- 
- 
-# This function returns true if given
-# instance of N*N - 1 puzzle is solvable
-def isSolvable2(puzzle):
-    # Count inversions in given puzzle
-    invCount = getInvCount(puzzle)
- 
-    # If grid is odd, return true if inversion
-    # count is even.
-    if (N & 1):
-        return ~(invCount & 1)
- 
-    else:    # grid is even
-        pos = findXPosition(puzzle)
-        if (pos & 1):
-            return ~(invCount & 1)
-        else:
-            return invCount & 1

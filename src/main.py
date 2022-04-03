@@ -1,4 +1,5 @@
 from src import *
+from gui import *
 
 # ========= FILENAME VALIDATION SECTION ========= #
 filename = input("Enter your filename (with extension): ")
@@ -15,9 +16,10 @@ m = readFile(path+'\\'+filename)
 
 
 # ========== MAIN PROGRAM SECTION ========== #
+printInitInfo(m)
 
-
-if isSolvable2(m):
+if isSolvable(m):
+    print("The Problem is solvable!")
     nodes = 0
     routes = {str(m) : ('root',None)}
     root_cost = getCost(m)
@@ -25,7 +27,7 @@ if isSolvable2(m):
     # Init heap
     l = [(root_cost,m)]
     hq.heapify(l)
-
+    print("Please wait...")
 
     # ============= SOLUTION FINDING SECTION ============= #
     # begin timer
@@ -51,11 +53,22 @@ if isSolvable2(m):
 
     # Gather and print the solved path
     result = gatherSolvedPath(m,routes)
-    printSolvedPath(result)
+    print()
+    choice = input("Do you want to launch graphical visualization? (y/n) ")
+    while choice not in ['y','n']:
+        print("Invalid input!")
+        choice = input("Do you want to launch graphical visualization? (y/n) ")
+    
+    print("\nTotal Node(s) Needed to Solve : %d" % nodes)
+    print("ALGORITHM RUNTIME: %.5f s" % (float((end-start).total_seconds())) )
+    
+    if choice == 'y':
+        result = [i[0] for i in result][::-1]
+        gui(result)
+    else:
+        printSolvedPath(result)
 
 
     # Information about the solution
-    print("Total Node(s) Needed to Solve : %d" % nodes)
-    print("ALGORITHM RUNTIME: %.5f s" % (float((end-start).total_seconds())) )
 else:
     print("THIS PROBLEM IS NOT SOLVABLE")
